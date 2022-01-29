@@ -1,0 +1,62 @@
+version: '3'
+services:
+
+  # NGINX
+  nginx:
+    build:
+      context: ./images/nginx
+      args:
+        - NGINX_VERSION
+        - TIMEZONE
+    volumes:
+      - ./www:/var/www/html
+      - ./log/nginx:/var/log/nginx/
+    ports:
+      - "80"
+    depends_on:
+      - php-fpm
+      - db
+    networks:
+      project_net:
+        ipv4_address: ${NETWORK_WEB_IP}
+
+  # PHP-FPM
+  php-fpm:
+    build:
+      context: ./images/php-fpm
+      args:
+        - PHP_VERSION
+        - TIMEZONE
+    user: ${USER_ID}:${GROUP_ID}
+    volumes:
+      - ./www:/var/www/html
+      - ./log/xdebug:/tmp/xdebug/
+    environment:
+      XDEBUG_CONFIG: "client_host=${NETWORK_HOST} log=/tmp/xdebug/xdebug.log"
+      PHP_IDE_CONFIG: "serverName=${COMPOSE_PROJECT_NAME}"
+    networks:
+      project_net:
+        ipv4_address: ${NETWORK_PHP_FPM_IP}
+    working_dir: /var/www/html
+
+  # DATABASE
+  db:
+    build:
+      context: ./images/postgres
+      args:
+        - POSTGRESS_VERSION
+        - TIMEZONE
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    networks:
+      project_net:
+        ipv4_address: ${NETWORK_DB_IP}
+
+networks:
+  project_net:
+    driver: bridge
+    ipam:
+      config:
+        -   subnet: ${NETWORK_SUBNET}
