@@ -9,6 +9,7 @@ Build consists of the following services (version default):
 - node 17
 
 You can change the software version in .env file
+
 ##Using
 I`am use this build on my Ubuntu 21 and IDE PhpStorm
 
