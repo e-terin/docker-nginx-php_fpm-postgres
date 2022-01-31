@@ -6,7 +6,7 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 LABEL author.name = "Evgeniy Terin"
 LABEL author.email = "web@derin.ru"
 
-#RUN apt-get update && apt-get install -y wget unzip
+RUN apt-get update && apt-get install -y wget unzip
 
 # GD extension
 #RUN apt-get update && apt-get install -y \
@@ -22,7 +22,7 @@ RUN pecl install xdebug-3.1.2 && docker-php-ext-enable xdebug
 # Standart PHP extensions
 #RUN docker-php-ext-install bcmath
 #RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
-#RUN docker-php-ext-install zip
+RUN docker-php-ext-install zip
 #RUN docker-php-ext-install pdo_mysql && docker-php-ext-enable pdo_mysql
 #RUN docker-php-ext-install pcntl
 
