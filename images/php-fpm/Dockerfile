@@ -6,7 +6,7 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 LABEL author.name = "Evgeniy Terin"
 LABEL author.email = "web@derin.ru"
 
-RUN apt-get update && apt-get install -y wget unzip
+RUN apt-get update && apt-get install -y wget unzip libzip-dev
 
 # GD extension
 #RUN apt-get update && apt-get install -y \
